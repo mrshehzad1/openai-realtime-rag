@@ -384,6 +384,41 @@ export function ConsolePage() {
     // Add tools
     client.addTool(
       {
+        name: 'query_chroma_db',
+        description: 'Queries the Chroma vector DB for embedded document matches.',
+        parameters: {
+          type: 'object',
+          properties: {
+            query: {
+              type: 'string',
+              description: 'The query string to search the embedded documents.',
+            },
+          },
+          required: ['query'],
+        },
+      },
+      async ({ query }: { query: string }) => {
+        // Make the POST request to your FastAPI Chroma DB query endpoint
+        try {
+          const response = await fetch('http://localhost:8000/query', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query }),  // Pass the query string
+          });
+  
+          // Check for success and parse the response
+          const data = await response.json();
+          return data.results;  // This will return the ChromaDB query results
+        } catch (error) {
+          console.error('Error querying Chroma DB:', error);
+          return { error: 'Failed to query Chroma DB.' };  // Handle any errors gracefully
+        }
+      }
+    );
+    client.addTool(
+      {
         name: 'set_memory',
         description: 'Saves important data about the user into memory.',
         parameters: {
@@ -411,49 +446,7 @@ export function ConsolePage() {
         return { ok: true };
       }
     );
-    client.addTool(
-      {
-        name: 'get_weather',
-        description:
-          'Retrieves the weather for a given lat, lng coordinate pair. Specify a label for the location.',
-        parameters: {
-          type: 'object',
-          properties: {
-            lat: {
-              type: 'number',
-              description: 'Latitude',
-            },
-            lng: {
-              type: 'number',
-              description: 'Longitude',
-            },
-            location: {
-              type: 'string',
-              description: 'Name of the location',
-            },
-          },
-          required: ['lat', 'lng', 'location'],
-        },
-      },
-      async ({ lat, lng, location }: { [key: string]: any }) => {
-        setMarker({ lat, lng, location });
-        setCoords({ lat, lng, location });
-        const result = await fetch(
-          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,wind_speed_10m`
-        );
-        const json = await result.json();
-        const temperature = {
-          value: json.current.temperature_2m as number,
-          units: json.current_units.temperature_2m as string,
-        };
-        const wind_speed = {
-          value: json.current.wind_speed_10m as number,
-          units: json.current_units.wind_speed_10m as string,
-        };
-        setMarker({ lat, lng, location, temperature, wind_speed });
-        return json;
-      }
-    );
+    
 
     // handle realtime events from client + server for event logging
     client.on('realtime.event', (realtimeEvent: RealtimeEvent) => {
