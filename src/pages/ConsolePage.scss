@@ -100,16 +100,6 @@
           }
         }
       }
-      & > div.kv {
-        height: 250px;
-        max-height: 250px;
-        white-space: pre;
-        background-color: #ececf1;
-        .content-block-body {
-          padding: 16px;
-          margin-top: 56px;
-        }
-      }
     }
     .content-logs {
       width: 50%; // Add this line
@@ -210,6 +200,7 @@
 .sidebar h3 {
     margin: 0;
     padding: 15px;
+    font-family: 'Roboto Mono', monospace;
     font-size: 20px;
     color: #18181b;
     font-weight: 600;
@@ -236,6 +227,7 @@
   background-color: #f9f9f9;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
+  font-family: 'Roboto Mono', monospace;
   font-size: 14px;
   color: #444;
 }

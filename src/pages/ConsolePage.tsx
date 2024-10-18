@@ -22,27 +22,8 @@ import { WavRenderer } from '../utils/wav_renderer';
 import { X, Edit, Zap, ArrowUp, ArrowDown } from 'react-feather';
 import { Button } from '../components/button/Button';
 import { Toggle } from '../components/toggle/Toggle';
-import { Map } from '../components/Map';
 
 import './ConsolePage.scss';
-import { isJsxOpeningLikeElement } from 'typescript';
-
-/**
- * Type for result from get_weather() function call
- */
-interface Coordinates {
-  lat: number;
-  lng: number;
-  location?: string;
-  temperature?: {
-    value: number;
-    units: string;
-  };
-  wind_speed?: {
-    value: number;
-    units: string;
-  };
-}
 
 /**
  * Type for all event logs
@@ -120,12 +101,6 @@ export function ConsolePage() {
   const [isConnected, setIsConnected] = useState(false);
   const [canPushToTalk, setCanPushToTalk] = useState(true);
   const [isRecording, setIsRecording] = useState(false);
-  const [memoryKv, setMemoryKv] = useState<{ [key: string]: any }>({});
-  const [coords, setCoords] = useState<Coordinates | null>({
-    lat: 37.775593,
-    lng: -122.418137,
-  });
-  const [marker, setMarker] = useState<Coordinates | null>(null);
 
   /**
    * Utility for formatting the timing of logs
@@ -203,12 +178,6 @@ export function ConsolePage() {
     setIsConnected(false);
     setRealtimeEvents([]);
     setItems([]);
-    setMemoryKv({});
-    setCoords({
-      lat: 37.775593,
-      lng: -122.418137,
-    });
-    setMarker(null);
 
     const client = clientRef.current;
     client.disconnect();
@@ -386,14 +355,14 @@ export function ConsolePage() {
     // Add tools
     client.addTool(
       {
-        name: 'query_chroma_db',
-        description: 'Queries the Chroma vector DB for embedded document matches.',
+        name: 'query_db',
+        description: 'Queries the knowledgebase stored in the vector DB to retrieve relevant and specific context.',
         parameters: {
           type: 'object',
           properties: {
             query: {
               type: 'string',
-              description: 'The query string to search the embedded documents.',
+              description: 'The query string to search the knowledgebase',
             },
           },
           required: ['query'],
@@ -413,9 +382,9 @@ export function ConsolePage() {
           setQueryResults(data.results);  // Update the state with query results
           return data.results;
         } catch (error) {
-          console.error('Error querying Chroma DB:', error);
-          setQueryResults(['Failed to query Chroma DB.']);
-          return { error: 'Failed to query Chroma DB.' };
+          console.error('Error querying database:', error);
+          setQueryResults(['Failed to query database.']);
+          return { error: 'Failed to query database.' };
         }
       }
     );
@@ -473,7 +442,7 @@ export function ConsolePage() {
       <div className="content-top">
         <div className="content-title">
           <img src="/openai-logomark.svg" />
-          <span>realtime console</span>
+          <span>Realtime RAG Assistant - Prepared By Adam Lucek</span>
         </div>
         <div className="content-api-key">
           {!LOCAL_RELAY_SERVER_URL && (
@@ -669,7 +638,7 @@ export function ConsolePage() {
                       ))}
                     </ul>
                   ) : (
-                    <p>No results yet. Try querying for documents.</p>
+                    <p>No results yet. Results retrieved from Voice Assistant will show up here.</p>
                   )}
                 </div>
               </div>

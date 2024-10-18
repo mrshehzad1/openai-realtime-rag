@@ -31,4 +31,5 @@ yarn-debug.log*
 yarn-error.log*
 
 /.ipynb_checkpoints/
-zfc_guide.pdf
+eMarketing.pdf
+/chroma
