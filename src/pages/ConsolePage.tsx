@@ -68,6 +68,8 @@ export function ConsolePage() {
     localStorage.setItem('tmp::voice_api_key', apiKey);
   }
 
+  const [queryResults, setQueryResults] = useState<string[]>([]);  // Add this state for storing results
+  
   /**
    * Instantiate:
    * - WavRecorder (speech input)
@@ -398,55 +400,25 @@ export function ConsolePage() {
         },
       },
       async ({ query }: { query: string }) => {
-        // Make the POST request to your FastAPI Chroma DB query endpoint
         try {
           const response = await fetch('http://localhost:8000/query', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ query }),  // Pass the query string
+            body: JSON.stringify({ query }),
           });
-  
-          // Check for success and parse the response
+    
           const data = await response.json();
-          return data.results;  // This will return the ChromaDB query results
+          setQueryResults(data.results);  // Update the state with query results
+          return data.results;
         } catch (error) {
           console.error('Error querying Chroma DB:', error);
-          return { error: 'Failed to query Chroma DB.' };  // Handle any errors gracefully
+          setQueryResults(['Failed to query Chroma DB.']);
+          return { error: 'Failed to query Chroma DB.' };
         }
       }
     );
-    client.addTool(
-      {
-        name: 'set_memory',
-        description: 'Saves important data about the user into memory.',
-        parameters: {
-          type: 'object',
-          properties: {
-            key: {
-              type: 'string',
-              description:
-                'The key of the memory value. Always use lowercase and underscores, no other characters.',
-            },
-            value: {
-              type: 'string',
-              description: 'Value can be anything represented as a string',
-            },
-          },
-          required: ['key', 'value'],
-        },
-      },
-      async ({ key, value }: { [key: string]: any }) => {
-        setMemoryKv((memoryKv) => {
-          const newKv = { ...memoryKv };
-          newKv[key] = value;
-          return newKv;
-        });
-        return { ok: true };
-      }
-    );
-    
 
     // handle realtime events from client + server for event logging
     client.on('realtime.event', (realtimeEvent: RealtimeEvent) => {
@@ -686,35 +658,21 @@ export function ConsolePage() {
         </div>
         <div className="content-right">
           <div className="content-block map">
-            <div className="content-block-title">get_weather()</div>
-            <div className="content-block-title bottom">
-              {marker?.location || 'not yet retrieved'}
-              {!!marker?.temperature && (
-                <>
-                  <br />
-                  🌡️ {marker.temperature.value} {marker.temperature.units}
-                </>
-              )}
-              {!!marker?.wind_speed && (
-                <>
-                  {' '}
-                  🍃 {marker.wind_speed.value} {marker.wind_speed.units}
-                </>
-              )}
-            </div>
             <div className="content-block-body full">
-              {coords && (
-                <Map
-                  center={[coords.lat, coords.lng]}
-                  location={coords.location}
-                />
-              )}
-            </div>
-          </div>
-          <div className="content-block kv">
-            <div className="content-block-title">set_memory()</div>
-            <div className="content-block-body content-kv">
-              {JSON.stringify(memoryKv, null, 2)}
+              <div className="sidebar">
+                <h3>Retrieved Documents</h3>
+                <div className="sidebar-content">
+                  {queryResults.length > 0 ? (
+                    <ul>
+                      {queryResults.map((result, index) => (
+                        <li key={index}>{result}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No results yet. Try querying for documents.</p>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
