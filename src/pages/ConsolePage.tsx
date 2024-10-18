@@ -268,6 +268,11 @@ export function ConsolePage() {
     }
   }, [items]);
 
+  useEffect(() => {
+    // This effect will run whenever queryResults changes
+    console.log('Query results updated:', queryResults);
+  }, [queryResults]);
+
   /**
    * Set up render loops for the visualization canvas
    */
@@ -349,6 +354,7 @@ export function ConsolePage() {
 
     // Set instructions
     client.updateSession({ instructions: instructions });
+    client.updateSession({ voice: 'echo'})
     // Set transcription, otherwise we don't get user transcriptions back
     client.updateSession({ input_audio_transcription: { model: 'whisper-1' } });
 
