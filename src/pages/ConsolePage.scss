@@ -66,7 +66,7 @@
       }
     }
     .content-right {
-      width: 50%; // Change this from a fixed width to 50%
+      width: 50%; 
       flex-shrink: 0;
       display: flex;
       flex-direction: column;
@@ -102,7 +102,7 @@
       }
     }
     .content-logs {
-      width: 50%; // Add this line
+      width: 50%; 
       flex-grow: 1;
       flex-shrink: 1;
       display: flex;
@@ -205,8 +205,8 @@
     color: #18181b;
     font-weight: 600;
     border-bottom: 2px solid #696969;
-    background-color: #ffffff; // Add this to ensure the background is solid
-    z-index: 1; // Ensure the title stays on top
+    background-color: #ffffff;
+    z-index: 1; 
   }
 
 .sidebar-content {
