@@ -376,7 +376,7 @@ export function ConsolePage() {
       },
       async ({ query }: { query: string }) => {
         try {
-          const response = await fetch('http://localhost:8000/query', {
+          const response = await fetch('https://76e84595-79d7-45be-8d81-d3cb6915e5d4-00-bzjnbtxql6kv.sisko.replit.dev/query', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -447,8 +447,8 @@ export function ConsolePage() {
     <div data-component="ConsolePage">
       <div className="content-top">
         <div className="content-title">
-          <img src="/openai-logomark.svg" />
-          <span>Realtime RAG Assistant - Prepared By Adam Lucek</span>
+          <img src="/logo-dark.png" />
+          <span className="cybersmartstitle">CyberSmarts Chat App</span>
         </div>
         <div className="content-api-key">
           {!LOCAL_RELAY_SERVER_URL && (
@@ -464,7 +464,7 @@ export function ConsolePage() {
       </div>
       <div className="content-main">
         <div className="content-logs">
-          <div className="content-block events">
+          {/* <div className="content-block events">
             <div className="visualization">
               <div className="visualization-entry client">
                 <canvas ref={clientCanvasRef} />
@@ -537,7 +537,7 @@ export function ConsolePage() {
                 );
               })}
             </div>
-          </div>
+          </div> */}
           <div className="content-block conversation">
             <div className="content-block-title">conversation</div>
             <div className="content-block-body" data-conversation-content>
@@ -631,7 +631,7 @@ export function ConsolePage() {
             />
           </div>
         </div>
-        <div className="content-right">
+        {/* <div className="content-right">
           <div className="content-block map">
             <div className="content-block-body full">
               <div className="sidebar">
@@ -650,7 +650,7 @@ export function ConsolePage() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
