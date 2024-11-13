@@ -15,4 +15,6 @@ if (!OPENAI_API_KEY) {
 const PORT = parseInt(process.env.PORT) || 8081;
 
 const relay = new RealtimeRelay(OPENAI_API_KEY);
-relay.listen(PORT, '0.0.0.0');
+relay.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on http://0.0.0.0:${PORT}`);
+});
