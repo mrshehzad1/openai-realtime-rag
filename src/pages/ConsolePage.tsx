@@ -376,7 +376,7 @@ export function ConsolePage() {
       },
       async ({ query }: { query: string }) => {
         try {
-          const response = await fetch('https://76e84595-79d7-45be-8d81-d3cb6915e5d4-00-bzjnbtxql6kv.sisko.replit.dev/query', {
+          const response = await fetch('http://localhost:8000/query', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
